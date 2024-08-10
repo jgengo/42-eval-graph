@@ -190,7 +190,7 @@
             }
 
             function dragstarted(event, d) {
-                if (!event.active) simulation.alphaTarget(0.3).restart();
+                if (!event.active) simulation.alphaTarget(0).restart();
                 d.fx = d.x;
                 d.fy = d.y;
             }
@@ -202,8 +202,8 @@
 
             function dragended(event, d) {
                 if (!event.active) simulation.alphaTarget(0);
-                d.fx = null;
-                d.fy = null;
+                d.fx = d.x;
+                d.fy = d.y;
             }
 
             function filterNodes() {
