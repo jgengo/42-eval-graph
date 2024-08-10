@@ -1,0 +1,7 @@
+web/data.json
+config.yml
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
