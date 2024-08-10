@@ -10,6 +10,11 @@ This project is a simple Proof-of-Concept for the 42network allowing to visualiz
 
 ![example](.github/docs/image0.png)
 
+<br>
+<br>
+
+![example link](.github/docs/image1.png)
+
 ## Requirements
 
 - 42API app
