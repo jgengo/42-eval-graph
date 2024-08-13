@@ -1,7 +1,4 @@
-import os
-import yaml
 import math
-import json
 import time
 import logging
 import requests
@@ -10,9 +7,8 @@ import threading
 from tqdm import tqdm
 from queue import Queue
 from copy import deepcopy
-from pygments import highlight
-from pygments.lexers.data import JsonLexer
-from pygments.formatters.terminal import TerminalFormatter
+
+from config import config
 
 requests.packages.urllib3.disable_warnings()
 
@@ -22,16 +18,13 @@ class IntraAPIClient(object):
     verify_requests = False
 
     def __init__(self, progress_bar=False):
-        base_dir = os.path.dirname(os.path.realpath(__file__))
-        with open(base_dir + '/config.yml', 'r') as cfg_stream:
-            config = yaml.load(cfg_stream, Loader=yaml.BaseLoader)
-            self.client_id = config['intra']['client']
-            self.client_secret = config['intra']['secret']
-            self.token_url = config['intra']['uri']
-            self.api_url = config['intra']['endpoint']
-            self.scopes = config['intra']['scopes']
-            self.progress_bar = progress_bar
-            self.token = None
+        self.client_id = config['intra']['client']
+        self.client_secret = config['intra']['secret']
+        self.token_url = config['intra']['uri']
+        self.api_url = config['intra']['endpoint']
+        self.scopes = config['intra']['scopes']
+        self.progress_bar = progress_bar
+        self.token = None
 
     def request_token(self):
         request_token_payload = {

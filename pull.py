@@ -1,19 +1,20 @@
-from intra import ic
 import json
+
 from collections import defaultdict
 
+from config import config
+from intra import ic
 
-CAMPUS_ID = 13
-CURSUS_ID = 21
 
 def fetch():
     res = ic.pages_threaded('scale_teams', params={
-        'filter[campus_id]': CAMPUS_ID,
-        'filter[cursus_id]': CURSUS_ID,
-        'range[begin_at]': "2023-08-10,2024-08-10"
+        'filter[campus_id]': config['campus_id'],
+        'filter[cursus_id]': config['cursus_id'],
+        'range[begin_at]': config['date_range']
     })
 
     return res
+
 
 def process(res):
     nodes = set()
@@ -45,6 +46,7 @@ def process(res):
         "links": links_data
     }
 
+
 def write(data):
     with open('web/data.json', 'w') as f:
         json.dump(data, f, indent=4)
@@ -52,9 +54,11 @@ def write(data):
 
 if __name__ == "__main__":
     ic.progress_enable()
+    print("Fetching evaluations, can take some time...")
     res = fetch()
+    print(f"Found {len(res)} evaluations")
+    print("Processing data...")
     data = process(res)
+    print("Done\nWriting into data.json...")
     write(data)
-
-
-
+    print("Done")

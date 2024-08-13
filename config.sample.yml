@@ -1,8 +1,14 @@
 ---
-  intra:
-    client: "u-"
-    secret: "s-"
-    uri: "https://api.intra.42.fr/v2/oauth/token"
-    endpoint: "https://api.intra.42.fr/v2"
-    scopes: "public projects forum profile elearning tig"
+campus_id: 13
+cursus_id: 21
+
+# range of date evaluations should be fetch
+date_range: '2024-02-01,2024-08-01'  # between 1st feb to 1st aug 2024
+
+intra:
+  client: "u-"
+  secret: "s-"
+  uri: "https://api.intra.42.fr/v2/oauth/token"
+  endpoint: "https://api.intra.42.fr/v2"
+  scopes: "public projects forum profile elearning tig"
 

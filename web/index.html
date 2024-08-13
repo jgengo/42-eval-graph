@@ -112,7 +112,7 @@
             .force("charge", d3.forceManyBody().strength(-300))
             .force("center", d3.forceCenter(width / 2, height / 2));
 
-        d3.json("data.json").then(function(data) {
+        d3.json("./data.json").then(function(data) {
             const link = container.append("g")
                 .attr("class", "links")
                 .selectAll("line")
