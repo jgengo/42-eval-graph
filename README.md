@@ -47,7 +47,7 @@ The previous command will create a data.json file inside `./web` directory
 
 The easiest way to run a little web server to open the website is to go inside web/ folder and run a http server with python
 ```
-cd web/ && run python3 -m http.server
+cd web/ && python3 -m http.server
 ```
 
 Your network graph should then be accessible from http://localhost:8000/
