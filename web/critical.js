@@ -11,9 +11,10 @@ const tooltip = d3.select("body").append("div")
 const color = d3.scaleOrdinal(d3.schemePastel2);
 
 const simulation = d3.forceSimulation()
-    .force("link", d3.forceLink().id(d => d.id))
-    .force("charge", d3.forceManyBody().strength(-300))
-    .force("center", d3.forceCenter(width / 2, height / 2));
+    .force("link", d3.forceLink().id(d => d.id).distance(50))
+    .force("charge", d3.forceManyBody().strength(-100))
+    .force("center", d3.forceCenter(width / 2, height / 2))
+	.force("collide", d3.forceCollide().radius(20).iterations(2));
 
 d3.json("./data.json").then(function(data) {
     // Filter the links and nodes
