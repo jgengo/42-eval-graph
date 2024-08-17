@@ -1,4 +1,4 @@
-web/data.json
+web/*.json
 config.yml
 
 __pycache__/
@@ -6,4 +6,4 @@ __pycache__/
 *.pyo
 *.pyd
 
-venv/
+env/
