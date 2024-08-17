@@ -1,7 +1,10 @@
+import sys
+
 from datetime import datetime, timedelta
-from pull import process, write
-from intra import ic
+
 from config import config
+from intra import ic
+from pull import process, write
 
 
 def range_date(date_str):
@@ -26,11 +29,32 @@ def fetch_users(begin_at):
     return [str(cu['user']['id']) for cu in cursus_users]
 
 
+def validate_params():
+    # Check if the argument is provided
+    if len(sys.argv) < 2:
+        print("Error: No date provided. Please provide a date in the format YYYY-mm-dd.")
+        sys.exit(1)
+
+    date_str = sys.argv[1]
+
+    # Try to parse the date
+    try:
+        datetime.strptime(date_str, "%Y-%m-%d").date()
+        return date_str
+    except ValueError:
+        print(f"Error: The date '{date_str}' is not in the correct format YYYY-mm-dd.")
+        sys.exit(1)
+
+
 if __name__ == '__main__':
-    date = "2023-10-23"
+    date = validate_params()
+
     print(f'Fetching users where cursus started on {date}')
     users = fetch_users(date)
     print(f'Found {len(users)}')
+
+    if len(users) == 0:
+        sys.exit(0)
 
     print("Fetching evaluations, can take some time...")
     scale_teams = []
