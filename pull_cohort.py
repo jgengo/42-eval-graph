@@ -4,17 +4,13 @@ from datetime import datetime, timedelta
 
 from config import config
 from intra import ic
-from pull import process, write
+from helpers import process_scale_teams, write, chunk_list
 
 
 def range_date(date_str):
     date = datetime.strptime(date_str, "%Y-%m-%d")
     next_day = date + timedelta(days=1)
     return f"{date_str},{next_day.strftime('%Y-%m-%d')}"
-
-
-def slice(elems, n_elems):
-    return [elems[i:i + n_elems] for i in range(0, len(elems), n_elems)]
 
 
 def fetch_users(begin_at):
@@ -58,7 +54,7 @@ if __name__ == '__main__':
 
     print("Fetching evaluations, can take some time...")
     scale_teams = []
-    for uids in slice(users, 25):
+    for uids in chunk_list(users, 25):
         res = ic.pages_threaded('scale_teams', params={
             'filter[user_id]': ','.join(uids)
         })
@@ -66,7 +62,7 @@ if __name__ == '__main__':
 
     print(f"Found {len(scale_teams)} evaluations")
     print("Processing data...")
-    data = process(scale_teams)
+    data = process_scale_teams(scale_teams)
     print("Done\nWriting into data.json")
     write(data)
     print("Done")
