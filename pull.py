@@ -32,7 +32,8 @@ def process(res):
             corrected_login = corrected['login']
             nodes.add(corrected_login)
             # Increment the count of evaluations between corrector and corrected
-            links[(corrector, corrected_login)] += 1
+            pair = tuple(sorted([corrector, corrected_login]))
+            links[pair] += 1
 
     # Convert nodes set to a list of dictionaries
     nodes_data = [{"id": node} for node in nodes]
@@ -49,7 +50,7 @@ def process(res):
 
 def write(data):
     with open('web/data.json', 'w') as f:
-        json.dump(data, f, indent=4)
+        json.dump(data, f, indent=2)
 
 
 if __name__ == "__main__":
