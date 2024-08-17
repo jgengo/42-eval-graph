@@ -29,13 +29,24 @@ d3.json("./data.json").then(function(data) {
     // Filter the nodes to only include those in filteredNodeIds
     const filteredNodes = data.nodes.filter(node => filteredNodeIds.has(node.id));
 
+    // Define a color scale for the links based on their value
+    const colorScale = d3.scaleLinear()
+        .domain([5, d3.max(filteredLinks, d => d.value)]) // From 5 to the max value
+        .range(["#ffcccc", "#ff0000"]); // Light red to intense red
+
+	const opacityScale = d3.scaleLinear()
+		.domain([5, d3.max(filteredLinks, d => d.value)])
+		.range([0.1, 1]);
+
     const link = container.append("g")
         .attr("class", "links")
         .selectAll("line")
         .data(filteredLinks)
         .enter().append("line")
-        .attr("class", (d) => `link ${d.value > 5 ? "alert" : "ok"}`)
+        .attr("class", (d) => `link`)
         .attr("stroke-width", d => Math.sqrt(d.value))
+        .attr("stroke", d => colorScale(d.value))
+		.attr("stroke-opacity", d => opacityScale(d.value))
         .on("mouseover", function(event, d) {
             tooltip.transition()
                 .duration(200)
