@@ -2,9 +2,9 @@ import sys
 
 from datetime import datetime, timedelta
 
-from config import config
-from intra import ic
-from helpers import process_scale_teams, write, chunk_list
+from utils.config import config
+from utils.intra import ic
+from utils.helpers import process_scale_teams, write, chunk_list
 
 
 def range_date(date_str):

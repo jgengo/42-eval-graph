@@ -1,6 +1,6 @@
-from config import config
-from intra import ic
-from helpers import process_scale_teams, write
+from utils.config import config
+from utils.intra import ic
+from utils.helpers import process_scale_teams, write
 
 
 def fetch():

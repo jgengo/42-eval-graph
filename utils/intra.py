@@ -8,7 +8,7 @@ from tqdm import tqdm
 from queue import Queue
 from copy import deepcopy
 
-from config import config
+from .config import config
 
 requests.packages.urllib3.disable_warnings()
 
