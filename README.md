@@ -7,10 +7,9 @@
   <sub>Created by <a href="https://github.com/jgengo">Jordane Gengo (Titus)</a></sub>
 </div>
 
-<br/>
-
 <h3 align="center">Proof-of-Concept</h3>
 
+<br/>
 
 This project is a simple Proof-of-Concept for the 42network allowing to visualize the evaluations made via a network graph.
 
