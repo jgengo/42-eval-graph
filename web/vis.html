@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vis.js Network Graph</title>
+    <!-- Include Vis.js CSS -->
+    <link href="https://unpkg.com/vis-network/styles/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        /* Navbar */
+        .navbar {
+            height: 16px;
+            background-color: #333;
+            color: white;
+            padding: 0 10px;
+            line-height: 16px;
+            font-size: 12px;
+        }
+        /* Container */
+        .container {
+            display: flex;
+            height: calc(100vh - 16px); /* Full height minus navbar */
+        }
+        /* Left panel (Graph) */
+        .left-panel {
+            flex: 2;
+            border-right: 1px solid #ccc;
+            position: relative;
+        }
+        /* Right panel (List) */
+        .right-panel {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        /* List styles */
+        .evaluation-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .evaluation-list li {
+            padding: 5px;
+            cursor: pointer;
+        }
+        .evaluation-list li:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">Vis.js Network Graph</div>
+    <div class="container">
+        <div class="left-panel" id="graph">
+            <!-- Network graph container -->
+            <div id="network" style="width: 100%; height: 100%;"></div>
+        </div>
+        <div class="right-panel">
+            <h3>Evaluations</h3>
+            <ul class="evaluation-list" id="evaluation-list"></ul>
+        </div>
+    </div>
+    <!-- Include Vis.js Library -->
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <!-- Include D3.js for data loading -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <!-- Script to create the graph and list -->
+    <script>
+        // Load the data
+        d3.json('data.json').then(function(data) {
+            // Prepare nodes and edges for Vis.js
+            const nodes = data.nodes.map(node => ({ id: node.id, label: node.id }));
+            const edges = data.links.map((link, index) => ({
+                id: index,
+                from: link.source,
+                to: link.target,
+                value: link.value,
+                width: Math.max(1, link.value / 2), // Adjust width scaling as needed
+                title: `${link.source} → ${link.target} (${link.value})`
+            }));
+
+            // Create a data object
+            const visData = {
+                nodes: new vis.DataSet(nodes),
+                edges: new vis.DataSet(edges)
+            };
+
+            // Set network options
+            const options = {
+                edges: {
+                    scaling: {
+                        min: 1,
+                        max: 10
+                    },
+                    arrows: {
+                        to: { enabled: true, scaleFactor: 0.5 }
+                    },
+                    color: {
+                        color: '#848484',
+                        highlight: '#d62d20'
+                    },
+                    hoverWidth: 1.5
+                },
+                nodes: {
+                    shape: 'dot',
+                    size: 10,
+                    font: {
+                        size: 12,
+                        color: '#000000'
+                    },
+                    borderWidth: 1,
+                    color: {
+                        highlight: {
+                            border: '#d62d20',
+                            background: '#faa5a5'
+                        }
+                    }
+                },
+                interaction: {
+                    hover: true,
+                    tooltipDelay: 50
+                },
+                physics: {
+                    stabilization: false,
+                    barnesHut: {
+                        gravitationalConstant: -8000,
+                        centralGravity: 0.3,
+                        springLength: 95,
+                        springConstant: 0.04,
+                        damping: 0.09,
+                        avoidOverlap: 0
+                    }
+                }
+            };
+
+            // Initialize the network
+            const network = new vis.Network(document.getElementById('network'), visData, options);
+
+            // Prepare evaluation list data
+            const evaluations = data.links.map((d, index) => {
+                return {
+                    id: index,
+                    source: d.source,
+                    target: d.target,
+                    value: d.value
+                };
+            });
+
+            // Sort evaluations from most to least
+            evaluations.sort((a, b) => b.value - a.value);
+
+            // Create evaluation list
+            const evalList = d3.select('#evaluation-list');
+            const listItems = evalList.selectAll('li')
+                .data(evaluations)
+                .enter()
+                .append('li')
+                .text(d => `${d.source} → ${d.target} (${d.value})`)
+                .on('mouseover', function(event, d) {
+                    // Highlight edge and nodes
+                    network.selectEdges([d.id]);
+                    network.selectNodes([d.source, d.target]);
+
+                    // Focus on the nodes smoothly
+                    network.focus(d.source, {
+                        scale: 1.5,
+                        animation: {
+                            duration: 500,
+                            easingFunction: 'easeInOutQuad'
+                        }
+                    });
+                })
+                .on('mouseout', function(event, d) {
+                    // Unselect all
+                    network.unselectAll();
+                });
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                network.redraw();
+            });
+        }).catch(function(error) {
+            console.log(error);
+        });
+    </script>
+</body>
+</html>
+
