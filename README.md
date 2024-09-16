@@ -1,10 +1,16 @@
-<h1 align="center"><code>42-eval-graph</code></h1>
+<p align="center">
+    <img src='.github/docs/logo.png' alt="42-eval-graph's logo" /><br />
+    <h1 align="center">42-eval-graph</h1>
+</p>
 
 <div align="center">
-  <sub>Created by <a href="">Jordane Gengo (Titus)</a></sub>
+  <sub>Created by <a href="https://github.com/jgengo">Jordane Gengo (Titus)</a></sub>
 </div>
 
-<h1 align="center">Proof-of-Concept</h1>
+<br/>
+
+<h3 align="center">Proof-of-Concept</h3>
+
 
 This project is a simple Proof-of-Concept for the 42network allowing to visualize the evaluations made via a network graph.
 
